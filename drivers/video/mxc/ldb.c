@@ -136,13 +136,21 @@ static int g_ldb_mode;
 
 static struct fb_videomode ldb_modedb[] = {
 	{
+         "LDB-WXGA1360", 60, 1360, 768, 14294,
+         67, 14,
+         13, 2,
+         29, 7,
+         FB_SYNC_HOR_HIGH_ACT,
+         FB_VMODE_NONINTERLACED,
+         0,},
+	{
 	 "LDB-WXGA", 60, 1280, 800, 14065,
 	 40, 40,
 	 10, 3,
 	 80, 10,
 	 0,
-	 FB_VMODE_NONINTERLACED,
-	 FB_MODE_IS_DETAILED,},
+         FB_VMODE_NONINTERLACED,
+         FB_MODE_IS_DETAILED,},
 	{
 	 "LDB-XGA", 60, 1024, 768, 15385,
 	 220, 40,
