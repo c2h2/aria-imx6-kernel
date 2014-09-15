@@ -944,10 +944,19 @@ sdhci_esdhc_imx_probe_dt(struct platform_device *pdev,
 			 struct esdhc_platform_data *boarddata)
 {
 	struct device_node *np = pdev->dev.of_node;
+	int ret;
 	struct sdhci_host *host = platform_get_drvdata(pdev);
 
 	if (!np)
 		return -ENODEV;
+
+	ret = of_alias_get_id(np, "mmcblk");
+	if (ret < 0) {
+		dev_err(&pdev->dev, "failed to get alias id, errno %d\n", ret);
+		return -ENODEV;
+	}
+
+	boarddata->devidx = ret;
 
 	if (of_get_property(np, "non-removable", NULL))
 		boarddata->cd_type = ESDHC_CD_PERMANENT;
@@ -1108,6 +1117,9 @@ static int sdhci_esdhc_imx_probe(struct platform_device *pdev)
 		imx_data->boarddata = *((struct esdhc_platform_data *)
 					host->mmc->parent->platform_data);
 	}
+
+	/* copy mmc block device index */
+	host->mmc->devidx = boarddata->devidx;
 
 	/* write_protect */
 	if (boarddata->wp_type == ESDHC_WP_GPIO) {

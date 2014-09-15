@@ -1959,7 +1959,10 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
 	struct mmc_blk_data *md;
 	int devidx, ret;
 
-	devidx = find_first_zero_bit(dev_use, max_devices);
+	/* devidx = find_first_zero_bit(dev_use, max_devices); */
+	devidx = find_next_zero_bit(dev_use, max_devices,
+		card->host->devidx);
+
 	if (devidx >= max_devices)
 		return ERR_PTR(-ENOSPC);
 	__set_bit(devidx, dev_use);
@@ -1977,7 +1980,9 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
 	 * index anymore so we keep track of a name index.
 	 */
 	if (!subname) {
-		md->name_idx = find_first_zero_bit(name_use, max_devices);
+		/* md->name_idx = find_first_zero_bit(name_use, max_devices); */
+		md->name_idx = find_next_zero_bit(name_use, max_devices,
+				card->host->devidx);
 		__set_bit(md->name_idx, name_use);
 	} else
 		md->name_idx = ((struct mmc_blk_data *)
