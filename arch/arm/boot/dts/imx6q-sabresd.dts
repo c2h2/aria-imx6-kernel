@@ -19,11 +19,6 @@
 	model = "Freescale i.MX6 Quad SABRE Smart Device Board";
 	compatible = "fsl,imx6q-sabresd", "fsl,imx6q";
 
-	aliases {
-		mmcblk0 = &usdhc4;
-		mmcblk1 = &usdhc3;
-		mmcblk2 = &usdhc2;
-	};
 };
 
 &battery {

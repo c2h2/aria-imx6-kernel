@@ -16,6 +16,11 @@
 		mxcfb1 = &mxcfb2;
 		mxcfb2 = &mxcfb3;
 		mxcfb3 = &mxcfb4;
+
+                mmcblk0 = &usdhc4;
+                mmcblk1 = &usdhc3;
+                mmcblk2 = &usdhc2;
+
 	};
 
 	memory {
@@ -501,13 +506,14 @@
 				MX6QDL_PAD_GPIO_5__GPIO1_IO05 0x80000000
 				MX6QDL_PAD_EIM_D29__GPIO3_IO29 0x80000000
 				MX6QDL_PAD_SD3_RST__GPIO7_IO08 0x80000000
-				MX6QDL_PAD_GPIO_9__GPIO1_IO09 0x80000000
 				MX6QDL_PAD_GPIO_1__WDOG2_B 0x80000000
 				MX6QDL_PAD_GPIO_2__GPIO1_IO02 0x80000000
 			>;
 		};
 	};
+};
 
+&iomuxc {
         ir_recv {
                 pinctrl_gpio1_9_carrier_1: gpio1_9grp {
                         fsl,pins = <
