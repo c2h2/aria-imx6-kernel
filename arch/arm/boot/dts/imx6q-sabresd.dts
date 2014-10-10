@@ -19,6 +19,13 @@
 	model = "Freescale i.MX6 Quad SABRE Smart Device Board";
 	compatible = "fsl,imx6q-sabresd", "fsl,imx6q";
 
+	ir_recv: ir-receiver {
+		compatible = "gpio-ir-receiver";
+		gpios = <&gpio1 9 1>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_gpio1_9_carrier_1>;
+	};
+
 	aliases {
 		mmcblk0 = &usdhc4;
 		mmcblk1 = &usdhc3;
@@ -157,4 +164,14 @@
         pinctrl-names = "default";
         pinctrl-0 = <&pinctrl_uart3_1>;
         status = "okay";
+};
+
+&iomuxc {
+	ir_recv {
+		pinctrl_gpio1_9_carrier_1: gpio1_9grp {
+			fsl,pins = <
+				MX6QDL_PAD_GPIO_9__GPIO1_IO09	0x80000000
+			>;
+		};
+	};
 };
