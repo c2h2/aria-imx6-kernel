@@ -112,7 +112,7 @@
 		compatible = "gpio-keys";
 		power {
 			label = "Power Button";
-			gpios = <&gpio3 29 1>;
+			gpios = <&gpio4 14 1>;
 			linux,code = <116>; /* KEY_POWER */
 			gpio-key,wakeup;
 		};
@@ -120,13 +120,27 @@
 		volume-up {
 			label = "Volume Up";
 			gpios = <&gpio1 4 1>;
-			linux,code = <115>; /* KEY_VOLUMEUP */
+			linux,code = <103>; /* KEY_UP */
 		};
 
 		volume-down {
 			label = "Volume Down";
 			gpios = <&gpio1 5 1>;
-			linux,code = <114>; /* KEY_VOLUMEDOWN */
+			linux,code = <108>; /* KEY_DOWN */
+		};
+
+
+		channel-up {
+			label = "Channel Up";
+			gpios = <&gpio7 12 1>;
+			linux,code = <106>; /* KEY_RIGHT */
+		};
+
+
+		channel-down {
+			label = "Channel Down";
+			gpios = <&gpio1 1 1>;
+			linux,code = <105>; /* KEY_LEFT */
 		};
 	};
 
@@ -147,7 +161,7 @@
 			"DMICDAT", "DMIC";
 		mux-int-port = <2>;
 		mux-ext-port = <3>;
-		hp-det-gpios = <&gpio7 8 1>;
+		/* hp-det-gpios = <&gpio7 8 1>; */
 		mic-det-gpios = <&gpio1 9 1>;
 	};
 
@@ -508,6 +522,9 @@
 				MX6QDL_PAD_SD3_RST__GPIO7_IO08 0x80000000
 				MX6QDL_PAD_GPIO_1__WDOG2_B 0x80000000
 				MX6QDL_PAD_GPIO_2__GPIO1_IO02 0x80000000
+				MX6QDL_PAD_GPIO_17__GPIO7_IO12 0x80000000
+				MX6QDL_PAD_GPIO_1__GPIO1_IO01 0x80000000
+				MX6QDL_PAD_KEY_COL4__GPIO4_IO14 0x80000000
 			>;
 		};
 	};
@@ -552,7 +569,7 @@
 
 &pcie {
 	power-on-gpio = <&gpio3 19 0>;
-	reset-gpio = <&gpio7 12 0>;
+	/* reset-gpio = <&gpio7 12 0>; */
 	status = "okay";
 };
 

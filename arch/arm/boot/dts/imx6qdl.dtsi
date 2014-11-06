@@ -1474,6 +1474,7 @@
 			>;
 		};
 
+
 		pinctrl_spdif_2: spdifgrp-2 {
 			fsl,pins = <
 				MX6QDL_PAD_GPIO_16__SPDIF_IN  0x1b0b0
