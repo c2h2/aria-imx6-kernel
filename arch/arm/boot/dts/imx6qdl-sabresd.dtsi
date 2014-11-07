@@ -108,27 +108,15 @@
 		};
 	};
 
-	gpio-keys {
+	gpio-keys1 {
 		compatible = "gpio-keys";
+
 		power {
 			label = "Power Button";
 			gpios = <&gpio4 14 1>;
 			linux,code = <116>; /* KEY_POWER */
 			gpio-key,wakeup;
 		};
-
-		volume-up {
-			label = "Volume Up";
-			gpios = <&gpio1 4 1>;
-			linux,code = <103>; /* KEY_UP */
-		};
-
-		volume-down {
-			label = "Volume Down";
-			gpios = <&gpio1 5 1>;
-			linux,code = <108>; /* KEY_DOWN */
-		};
-
 
 		channel-up {
 			label = "Channel Up";
@@ -142,6 +130,25 @@
 			gpios = <&gpio1 1 1>;
 			linux,code = <105>; /* KEY_LEFT */
 		};
+	};
+
+	gpio-keys2 {
+                compatible = "gpio-keys";
+                autorepeat;
+
+                volume-up {
+                        label = "Volume Up";
+                        gpios = <&gpio1 4 1>;
+                        linux,code = <103>; /* KEY_UP */
+                        autorepeat;
+                };
+
+                volume-down {
+                        label = "Volume Down";
+                        gpios = <&gpio1 5 1>;
+                        linux,code = <108>; /* KEY_DOWN */
+                        autorepeat;
+                };
 	};
 
 	sound {
