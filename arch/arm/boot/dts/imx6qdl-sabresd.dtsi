@@ -415,6 +415,12 @@
 		reg = <0x50>;
 	};
 
+	eeprom1: eeprom@51 {
+                compatible = "atmel,24c128";
+                reg = <0x51>;
+                pagesize = <64>;
+        };
+
 	max11801@48 {
 		compatible = "maxim,max11801";
 		reg = <0x48>;
