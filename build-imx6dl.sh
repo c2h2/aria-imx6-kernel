@@ -6,11 +6,13 @@ export PATH="/opt/gcc-linaro-arm-linux-gnueabihf-4.8-2013.06_linux/bin:/opt/gcc-
 make -j16 uImage LOADADDR=0x10008000
 make -j16 modules
 make imx6dl-sabresd.dtb
+make imx6dl-sabresd-ldo.dtb
 
 rm -rf deploy/imx6dl
 mkdir -p deploy/imx6dl/mod
 cp arch/arm/boot/uImage deploy/imx6dl
 cp arch/arm/boot/dts/imx6dl-sabresd.dtb deploy/imx6dl
+cp arch/arm/boot/dts/imx6dl-sabresd-ldo.dtb deploy/imx6dl
 
 make modules_install INSTALL_MOD_PATH=deploy/imx6dl/mod
 
