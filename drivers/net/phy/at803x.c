@@ -138,6 +138,21 @@ static struct phy_driver at8030_driver = {
 	},
 };
 
+/* ATHEROS 8031 */
+static struct phy_driver at8031_driver = {
+        .phy_id         = 0x004dd074,
+        .name           = "Atheros 8031 ethernet",
+        .phy_id_mask    = 0xffffffef,
+        .config_init    = at803x_config_init,
+        .features       = PHY_GBIT_FEATURES,
+        .flags          = PHY_HAS_INTERRUPT,
+        .config_aneg    = &genphy_config_aneg,
+        .read_status    = &genphy_read_status,
+        .driver         = {
+                .owner = THIS_MODULE,
+        },
+};
+
 static int __init atheros_init(void)
 {
 	int ret;
@@ -146,9 +161,15 @@ static int __init atheros_init(void)
 	if (ret)
 		goto err1;
 
+        ret = phy_driver_register(&at8031_driver);
+        if (ret)
+                goto err2;
+
 	ret = phy_driver_register(&at8030_driver);
-	if (ret)
+	if (ret) {
+		phy_driver_unregister(&at8031_driver);
 		goto err2;
+	}
 
 	return 0;
 
@@ -161,6 +182,7 @@ err1:
 static void __exit atheros_exit(void)
 {
 	phy_driver_unregister(&at8035_driver);
+	phy_driver_unregister(&at8031_driver);
 	phy_driver_unregister(&at8030_driver);
 }
 
