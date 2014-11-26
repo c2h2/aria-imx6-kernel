@@ -179,11 +179,28 @@
 		hdmi-controller = <&hdmi_audio>;
 	};
 
+	backlight {
+		compatible = "gpio-backlight";
+		gpios = <&gpio7 11 GPIO_ACTIVE_HIGH>;
+                pinctrl-names = "default";
+                pinctrl-0 = <&pinctrl_gpio7_11_carrier_1>;
+                default-on;
+	};
+
+/*
+        backlight2: backlight {
+                compatible = "pwm-backlight";
+                pwms = <&pwm1 0 5000000>;
+                brightness-levels = <0 4 8 16 32 64 128 255>;
+                default-brightness-level = <7>;
+        };
+*/
+
 	mxcfb1: fb@0 {
 		compatible = "fsl,mxc_sdc_fb";
 		disp_dev = "ldb";
 		interface_pix_fmt = "RGB666";
-		mode_str ="LDB-WXGA";
+		mode_str ="LDB-WXGA1360";
 		default_bpp = <16>;
 		int_clk = <0>;
 		late_init = <0>;
@@ -231,13 +248,6 @@
 		pinctrl-names = "default";
 		pinctrl-0 = <&pinctrl_ipu1_1>;
 		status = "okay";
-	};
-
-	backlight {
-		compatible = "pwm-backlight";
-		pwms = <&pwm1 0 5000000>;
-		brightness-levels = <0 4 8 16 32 64 128 255>;
-		default-brightness-level = <7>;
 	};
 
 	v4l2_cap_0 {
@@ -544,6 +554,14 @@
 };
 
 &iomuxc {
+	backlight1 {
+		pinctrl_gpio7_11_carrier_1: gpio7_11grp {
+                        fsl,pins = <
+                                MX6QDL_PAD_GPIO_16__GPIO7_IO11   0x80000000
+                        >;
+		};
+	};
+
         ir_recv {
                 pinctrl_gpio1_9_carrier_1: gpio1_9grp {
                         fsl,pins = <
@@ -557,7 +575,7 @@
 	ipu_id = <1>;
 	disp_id = <1>;
 	ext_ref = <1>;
-	mode = "sep1";
+	mode = "sep0";
 	sec_ipu_id = <1>;
 	sec_disp_id = <0>;
 	status = "okay";
