@@ -2231,6 +2231,8 @@ OnError:
         /* Free LINUX_MDL_MAP. */
         gcmkVERIFY_OK(_DestroyMdlMap(mdl, mdlMap));
     }
+    *Physical = gcvNULL;
+    *Bytes = 0;
 
     if (mdl != gcvNULL)
     {
@@ -4112,6 +4114,7 @@ OnError:
         /* Free the memory. */
         _DestroyMdl(mdl);
     }
+    *Physical = gcvNULL;
 
     if (locked)
     {
