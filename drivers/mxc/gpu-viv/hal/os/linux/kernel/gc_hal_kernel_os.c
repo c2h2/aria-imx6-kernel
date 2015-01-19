@@ -211,6 +211,11 @@ struct _gckOS
 
     /* workqueue for os timer. */
     struct workqueue_struct *   workqueue;
+
+    int                         gpu_clk_on[3];
+    struct mutex                gpu_clk_mutex;
+
+    gctPOINTER                  vidmemMutex;
 };
 
 typedef struct _gcsSIGNAL * gcsSIGNAL_PTR;
@@ -1111,6 +1116,10 @@ gckOS_Construct(
         gcmkONERROR(gcvSTATUS_OUT_OF_MEMORY);
     }
 
+    mutex_init(&os->gpu_clk_mutex);
+
+    gcmkONERROR(gckOS_CreateMutex(os, &os->vidmemMutex));
+
     /* Return pointer to the gckOS object. */
     *Os = os;
 
@@ -1233,6 +1242,9 @@ gckOS_Destroy(
 
     /* Destroy debug lock mutex. */
     gcmkVERIFY_OK(gckOS_DeleteMutex(Os, Os->debugLock));
+
+    /* Destroy video memory mutex. */
+    gcmkVERIFY_OK(gckOS_DeleteMutex(Os, Os->vidmemMutex));
 
     /* Wait for all works done. */
     flush_workqueue(Os->workqueue);
@@ -2427,7 +2439,17 @@ gckOS_ReadRegisterEx(
     gcmkVERIFY_ARGUMENT(Address < Os->device->requestedRegisterMemSizes[Core]);
     gcmkVERIFY_ARGUMENT(Data != gcvNULL);
 
+    if(Address != 0x10) mutex_lock(&Os->gpu_clk_mutex);
+    BUG_ON(!Os->gpu_clk_on[Core]);
+
+    if(Address)
+    {
+        gctUINT32 AQHiClockControl = readl((gctUINT8 *)Os->device->registerBases[Core]);
+        BUG_ON((AQHiClockControl & 0x3) == 0x3);
+    }
+
     *Data = readl((gctUINT8 *)Os->device->registerBases[Core] + Address);
+    if(Address != 0x10) mutex_unlock(&Os->gpu_clk_mutex);
 
     /* Success. */
     gcmkFOOTER_ARG("*Data=0x%08x", *Data);
@@ -2477,7 +2499,17 @@ gckOS_WriteRegisterEx(
 
     gcmkVERIFY_ARGUMENT(Address < Os->device->requestedRegisterMemSizes[Core]);
 
+    mutex_lock(&Os->gpu_clk_mutex);
+    BUG_ON(!Os->gpu_clk_on[Core]);
+
+    if(Address)
+    {
+        gctUINT32 AQHiClockControl = readl((gctUINT8 *)Os->device->registerBases[Core]);
+        BUG_ON((AQHiClockControl & 0x3) == 0x3);
+    }
+
     writel(Data, (gctUINT8 *)Os->device->registerBases[Core] + Address);
+    mutex_unlock(&Os->gpu_clk_mutex);
 
     /* Success. */
     gcmkFOOTER_NO();
@@ -7023,6 +7055,7 @@ gckOS_SetGPUPower(
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0)
     if (Clock == gcvTRUE) {
         if (oldClockState == gcvFALSE) {
+            mutex_lock(&Os->gpu_clk_mutex);
             switch (Core) {
             case gcvCORE_MAJOR:
                 clk_enable(clk_3dcore);
@@ -7040,9 +7073,12 @@ gckOS_SetGPUPower(
             default:
                 break;
             }
+            Os->gpu_clk_on[Core] = 1;
+            mutex_unlock(&Os->gpu_clk_mutex);
         }
     } else {
         if (oldClockState == gcvTRUE) {
+            mutex_lock(&Os->gpu_clk_mutex);
             switch (Core) {
             case gcvCORE_MAJOR:
                 if (cpu_is_mx6q())
@@ -7060,11 +7096,14 @@ gckOS_SetGPUPower(
             default:
                 break;
             }
+            Os->gpu_clk_on[Core] = 0;
+            mutex_unlock(&Os->gpu_clk_mutex);
         }
     }
 #else
     if (Clock == gcvTRUE) {
         if (oldClockState == gcvFALSE) {
+            mutex_lock(&Os->gpu_clk_mutex);
             switch (Core) {
             case gcvCORE_MAJOR:
                 clk_prepare(clk_3dcore);
@@ -7089,9 +7128,12 @@ gckOS_SetGPUPower(
             default:
                 break;
             }
+            Os->gpu_clk_on[Core] = 1;
+            mutex_unlock(&Os->gpu_clk_mutex);
         }
     } else {
         if (oldClockState == gcvTRUE) {
+            mutex_lock(&Os->gpu_clk_mutex);
             switch (Core) {
             case gcvCORE_MAJOR:
                 clk_disable(clk_3dshader);
@@ -7116,6 +7158,8 @@ gckOS_SetGPUPower(
             default:
                 break;
             }
+            Os->gpu_clk_on[Core] = 0;
+            mutex_unlock(&Os->gpu_clk_mutex);
         }
     }
 #endif
@@ -8696,6 +8740,20 @@ gckOS_GetProcessNameByPid(
 
     rcu_read_unlock();
 
+    return gcvSTATUS_OK;
+}
+
+gceSTATUS
+gckOS_GetVideoMemoryMutex(
+    IN gckOS Os,
+    OUT gctPOINTER *Mutex
+    )
+{
+    gcmkHEADER_ARG("Mutex=x%X", Mutex);
+
+    *Mutex = Os->vidmemMutex;
+
+    gcmkFOOTER_NO();
     return gcvSTATUS_OK;
 }
 
