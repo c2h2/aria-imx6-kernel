@@ -861,7 +861,8 @@ static int mxcfb_check_var(struct fb_var_screeninfo *var, struct fb_info *info)
 			var->yres = bg_yres - pos_y;
 	}
 
-	if (var->rotate > IPU_ROTATE_VERT_FLIP)
+	/* if (var->rotate > IPU_ROTATE_VERT_FLIP) */
+	if (var->rotate >  IPU_ROTATE_180)
 		var->rotate = IPU_ROTATE_NONE;
 
 	if (var->xres_virtual < var->xres)
