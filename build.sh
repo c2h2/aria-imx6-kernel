@@ -5,12 +5,16 @@ export PATH="/opt/gcc-linaro-arm-linux-gnueabihf-4.8-2013.06_linux/bin:/opt/gcc-
 
 make -j16 uImage LOADADDR=0x10008000
 make -j16 modules
+
+make imx6dl-sabresd.dtb
 make imx6q-sabresd.dtb
 
 rm -rf deploy
 mkdir -p deploy/mod
+
 cp arch/arm/boot/uImage deploy/
 cp arch/arm/boot/dts/imx6q-sabresd.dtb deploy/
+cp arch/arm/boot/dts/imx6dl-sabresd.dtb deploy/
 
 make modules_install INSTALL_MOD_PATH=deploy/mod
 
@@ -21,5 +25,5 @@ make firmware
 make firmware_install INSTALL_MOD_PATH=deploy/mod
 
 cd deploy/mod
-tar -czf ../mod.tar.gz ./
+tar -czf ../mods.tar.gz ./
 cd ../..
