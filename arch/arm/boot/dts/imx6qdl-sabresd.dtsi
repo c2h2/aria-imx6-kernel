@@ -181,9 +181,9 @@
 
 	backlight {
 		compatible = "gpio-backlight";
-		gpios = <&gpio7 11 GPIO_ACTIVE_HIGH>;
+		gpios = <&gpio1 8 GPIO_ACTIVE_HIGH>;
                 pinctrl-names = "default";
-                pinctrl-0 = <&pinctrl_gpio7_11_carrier_1>;
+                pinctrl-0 = <&pinctrl_gpio1_8_carrier_1>;
                 default-on;
 	};
 
@@ -555,9 +555,9 @@
 
 &iomuxc {
 	backlight1 {
-		pinctrl_gpio7_11_carrier_1: gpio7_11grp {
+		pinctrl_gpio1_8_carrier_1: gpio1_8grp {
                         fsl,pins = <
-                                MX6QDL_PAD_GPIO_16__GPIO7_IO11   0x80000000
+                                MX6QDL_PAD_GPIO_8__GPIO1_IO08   0x80000000
                         >;
 		};
 	};
