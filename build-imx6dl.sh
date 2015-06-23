@@ -1,7 +1,7 @@
 export ARCH="arm"
-export CORES="24"
+export CORES="2"
 export CROSS_COMPILE="arm-linux-gnueabihf-"
-export PATH="/opt/gcc-linaro-arm-linux-gnueabihf-4.8-2013.06_linux/bin:/opt/gcc-linaro-arm-linux-gnueabihf-4.8-2013.06_linux/bin:$PATH"
+export PATH="/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin:/opt/gcc-linaro-arm-linux-gnueabihf-4.8-2013.06_linux/bin:/opt/gcc-linaro-arm-linux-gnueabihf-4.8-2013.06_linux/bin:$PATH"
 
 make -j16 uImage LOADADDR=0x10008000
 make -j16 modules

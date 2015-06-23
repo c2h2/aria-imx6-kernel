@@ -24,7 +24,7 @@
 #include <sound/initval.h>
 #include <sound/tlv.h>
 #include <sound/wm8960.h>
-
+#include <linux/clk.h>
 #include "wm8960.h"
 
 /* R25 - Power 1 */
@@ -1001,6 +1001,8 @@ static int wm8960_probe(struct snd_soc_codec *codec)
 	snd_soc_update_bits(codec, WM8960_ROUT1, 0x100, 0x100);
 	snd_soc_update_bits(codec, WM8960_LOUT2, 0x100, 0x100);
 	snd_soc_update_bits(codec, WM8960_ROUT2, 0x100, 0x100);
+	snd_soc_update_bits(codec, WM8960_LOUTMIX, 0x100, 0x100);
+	snd_soc_update_bits(codec, WM8960_ROUTMIX, 0x100, 0x100);
 
 	snd_soc_add_codec_controls(codec, wm8960_snd_controls,
 				     ARRAY_SIZE(wm8960_snd_controls));
@@ -1044,7 +1046,7 @@ static int wm8960_i2c_probe(struct i2c_client *i2c,
 	struct wm8960_data *pdata = dev_get_platdata(&i2c->dev);
 	struct wm8960_priv *wm8960;
 	int ret;
-
+	printk("====================wm8960_i2c_probe\n");
 	wm8960 = devm_kzalloc(&i2c->dev, sizeof(struct wm8960_priv),
 			      GFP_KERNEL);
 	if (wm8960 == NULL)
@@ -1063,7 +1065,12 @@ static int wm8960_i2c_probe(struct i2c_client *i2c,
 			return ret;
 		}
 	}
-
+	struct clk *codec_mclk;
+	codec_mclk = devm_clk_get(&i2c->dev, NULL);
+	if (!IS_ERR(codec_mclk))
+	{
+		clk_prepare_enable(codec_mclk);
+	}
 	i2c_set_clientdata(i2c, wm8960);
 
 	ret = snd_soc_register_codec(&i2c->dev,
@@ -1084,10 +1091,17 @@ static const struct i2c_device_id wm8960_i2c_id[] = {
 };
 MODULE_DEVICE_TABLE(i2c, wm8960_i2c_id);
 
+static const struct of_device_id wm8960_of_match[] = {
+	{ .compatible = "wlf,wm8960", },
+	{ }
+};
+MODULE_DEVICE_TABLE(of, wm8960_of_match);
+
 static struct i2c_driver wm8960_i2c_driver = {
 	.driver = {
 		.name = "wm8960",
 		.owner = THIS_MODULE,
+		.of_match_table = wm8960_of_match,
 	},
 	.probe =    wm8960_i2c_probe,
 	.remove =   wm8960_i2c_remove,

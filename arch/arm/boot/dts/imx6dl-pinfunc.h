@@ -1086,4 +1086,25 @@
 #define MX6QDL_PAD_SD4_DAT7__UART2_RX_DATA          0x35c 0x744 0x904 0x2 0x7
 #define MX6QDL_PAD_SD4_DAT7__GPIO2_IO15             0x35c 0x744 0x000 0x5 0x0
 
+
+
+
+
+#define PAD_CTL_PKE                     (1 << 7)
+#define PAD_CTL_PUE                     (1 << 6 | PAD_CTL_PKE)
+#define PAD_CTL_PUS_100K_DOWN           (0 << 4 | PAD_CTL_PUE)
+#define PAD_CTL_PUS_47K_UP              (1 << 4 | PAD_CTL_PUE)
+#define PAD_CTL_PUS_100K_UP             (2 << 4 | PAD_CTL_PUE)
+#define PAD_CTL_PUS_22K_UP              (3 << 4 | PAD_CTL_PUE)
+
+#define PAD_CTL_SPEED_MED               (2 << 6)
+#define PAD_CTL_DSE_40ohm               (6 << 3)
+#define PAD_CTL_HYS                     (1 << 8)
+
+#define MX6DL_ENET_PAD_CTRL (PAD_CTL_PKE | PAD_CTL_PUE  |               \
+                PAD_CTL_PUS_100K_UP | PAD_CTL_SPEED_MED |               \
+                PAD_CTL_DSE_40ohm   | PAD_CTL_HYS)
+
+#define NO_PAD_CTRL                     (1 << 17)
+
 #endif /* __DTS_IMX6DL_PINFUNC_H */

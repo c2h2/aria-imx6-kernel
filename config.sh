@@ -1,6 +1,5 @@
 export ARCH="arm"
-export CORES="24"
-export CROSS_COMPILE="arm-linux-gnueabihf-"
-export PATH="/opt/gcc-linaro-arm-linux-gnueabihf-4.8-2013.06_linux/bin:/opt/gcc-linaro-arm-linux-gnueabihf-4.8-2013.06_linux/bin:$PATH"
+export CROSS_COMPILE="arm-fsl-linux-gnueabi-"
+export PATH="/opt/freescale/usr/local/gcc-4.6.2-glibc-2.13-linaro-multilib-2011.12/fsl-linaro-toolchain/bin/:$PATH"
 
 make menuconfig
