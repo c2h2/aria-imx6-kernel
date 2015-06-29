@@ -127,7 +127,7 @@ static int imx_hifi_hw_params(struct snd_pcm_substream *substream,
                 return ret;
         }
 
-        printk(" *** sample_rate = %d, bclk = %d, sysclk = %d\n", sample_rate, priv->clk_frequency, sysclk);
+        //printk(" *** sample_rate = %d, bclk = %d, sysclk = %d\n", sample_rate, priv->clk_frequency, sysclk);
 
         return ret;
 }
