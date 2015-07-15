@@ -278,6 +278,15 @@
                 pinctrl-0 = <&pinctrl_gpio1_9_carrier_1>;
         };
 
+	watchdog2: watchdog {
+		compatible = "linux,wdt-gpio";
+		gpios = <&gpio4 15 GPIO_ACTIVE_HIGH>;
+                pinctrl-names = "default";
+                pinctrl-0 = <&pinctrl_gpio4_15_carrier_1>;
+		hw_algo = "toggle";
+		hw_margin_ms = <1600>;
+	};
+
 };
 
 &audmux {
@@ -565,6 +574,14 @@
                         >;
                 };
         };
+
+	watchdog {
+		pinctrl_gpio4_15_carrier_1: gpio4_15grp {
+                        fsl,pins = <
+                                MX6QDL_PAD_KEY_ROW4__GPIO4_IO15   0x80000000
+                        >;
+                };
+	};
 };
 
 &ldb {

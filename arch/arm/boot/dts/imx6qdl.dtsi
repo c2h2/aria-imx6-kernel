@@ -15,8 +15,10 @@
 
 / {
 	aliases {
+/*
 		flexcan0 = &flexcan1;
 		flexcan1 = &flexcan2;
+*/
 		gpio0 = &gpio1;
 		gpio1 = &gpio2;
 		gpio2 = &gpio3;
@@ -376,6 +378,7 @@
 				clock-names = "ipg", "per";
 			};
 
+/*
 			flexcan1: can@02090000 {
 				compatible = "fsl,imx6q-flexcan";
 				reg = <0x02090000 0x4000>;
@@ -395,6 +398,7 @@
 				gpr = <&gpr>;
 				status = "disabled";
 			};
+*/
 
 			gpt: gpt@02098000 {
 				compatible = "fsl,imx6q-gpt";
@@ -1210,6 +1214,7 @@
 		};
 	};
 
+/*
 	flexcan1 {
 		pinctrl_flexcan1_1: flexcan1grp-1 {
 			fsl,pins = <
@@ -1234,6 +1239,7 @@
 			>;
 		};
 	};
+*/
 
 	gpmi-nand {
 		pinctrl_gpmi_nand_1: gpmi-nand-1 {
