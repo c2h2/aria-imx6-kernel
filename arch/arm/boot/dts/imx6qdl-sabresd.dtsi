@@ -281,6 +281,7 @@
 	watchdog2: watchdog {
 		compatible = "linux,wdt-gpio";
 		gpios = <&gpio4 15 GPIO_ACTIVE_HIGH>;
+		enable-gpio = <&gpio1 7 GPIO_ACTIVE_LOW>;
                 pinctrl-names = "default";
                 pinctrl-0 = <&pinctrl_gpio4_15_carrier_1>;
 		hw_algo = "toggle";
@@ -579,6 +580,7 @@
 		pinctrl_gpio4_15_carrier_1: gpio4_15grp {
                         fsl,pins = <
                                 MX6QDL_PAD_KEY_ROW4__GPIO4_IO15   0x80000000
+				MX6QDL_PAD_GPIO_7__GPIO1_IO07     0x80000000
                         >;
                 };
 	};
